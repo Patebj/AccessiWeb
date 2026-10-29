@@ -1,3 +1,4 @@
+
 from bs4 import BeautifulSoup
 
 
@@ -7,28 +8,24 @@ def analyser_images(html):
 
     for image in soup.find_all("img"):
         if not image.has_attr("alt"):
+            source = image.get("src", "source inconnue")
             problemes.append(
-                "Image sans attribut alt : " + str(image.get("src", "source inconnue"))
+                "Image sans attribut alt : " + source
             )
 
     return problemes
 
 
 def main():
-    html = """
-    <html>
-        <body>
-            <img src="photo.jpg">
-            <img src="logo.png" alt="Logo de l'entreprise">
-            <img src="graphique.png" alt="">
-        </body>
-    </html>
-    """
+    with open("page_test.html", "r", encoding="utf-8") as fichier:
+        html = fichier.read()
 
     problemes = analyser_images(html)
 
     print("Rapport AccessiWeb")
-
+    print("------------------")
+    print("Nombre de problèmes détectés :", len(problemes))
+    print()
     if problemes:
         for probleme in problemes:
             print("- " + probleme)
